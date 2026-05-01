@@ -1,0 +1,30 @@
+# IDE / editor
+.idea/
+.vscode/
+
+# Claude Code
+CLAUDE.md
+.claude/
+
+# Node
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# Environment
+.env
+.env.local
+.env.*.local
+
+# Build output
+dist/
+build/
+.next/
+out/
+coverage/
+
+# OS
+.DS_Store
+Thumbs.db

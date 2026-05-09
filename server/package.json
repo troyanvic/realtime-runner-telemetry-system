@@ -6,7 +6,11 @@
   "engines": {
     "node": ">=20"
   },
-  "scripts": {},
+  "scripts": {
+    "dev": "tsx watch src/index.ts",
+    "build": "tsc",
+    "start": "node dist/index.js"
+  },
   "dependencies": {
     "ws": "^8.20.0"
   },

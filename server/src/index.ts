@@ -35,6 +35,7 @@ wss.on("connection", (socket, req) => {
         .on("close", () => {
           producer = null;
           lastSessionMeta = null;
+          console.log("producer disconnected");
         });
     } else {
       socket
@@ -51,10 +52,22 @@ wss.on("connection", (socket, req) => {
 
     socket
       .on("error", (err) => console.error("socket error:", err.message))
-      .on("close", () => subscribers.delete(socket));
+      .on("close", () => {
+        subscribers.delete(socket);
+        console.log("subscriber disconnected");
+      });
   } else {
     socket
       .on("error", (err) => console.error("socket error:", err.message))
       .close();
   }
+});
+
+process.on("SIGINT", () => {
+  for (const s of [producer, ...subscribers]) {
+    if (s !== null) s.close(1001, "server shutting down");
+  }
+  wss.close(() => {
+    process.exit(0);
+  });
 });

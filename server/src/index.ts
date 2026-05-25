@@ -21,13 +21,14 @@ wss.on("connection", (socket, req) => {
       console.log("producer connected");
 
       socket
-        .on("message", (data) => {
+        .on("message", (data, isBinary) => {
           if (lastSessionMeta === null) {
             lastSessionMeta = data.toString();
           }
 
           for (const s of subscribers) {
-            if (s.readyState === WebSocket.OPEN) s.send(data);
+            if (s.readyState === WebSocket.OPEN)
+              s.send(data, { binary: isBinary });
           }
         })
         .on("error", (err) => console.error("socket error:", err.message))
@@ -43,6 +44,10 @@ wss.on("connection", (socket, req) => {
   } else if (req.url === "/subscribe") {
     subscribers.add(socket);
     console.log("subscriber connected");
+
+    if (lastSessionMeta !== null) {
+      socket.send(lastSessionMeta, { binary: false });
+    }
 
     socket
       .on("error", (err) => console.error("socket error:", err.message))

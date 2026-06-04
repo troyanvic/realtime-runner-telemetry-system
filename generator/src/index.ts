@@ -1,6 +1,6 @@
 import { WebSocket } from "ws";
 import { randomUUID } from "node:crypto";
-import { SessionMeta, TickEvent } from "./types.js";
+import type { SessionMeta, TickEvent } from "@telemetry/shared";
 
 const ws = new WebSocket("ws://localhost:8080/publish");
 

@@ -22,6 +22,10 @@ wss.on("connection", (socket, req) => {
 
       socket
         .on("message", (data, isBinary) => {
+          if (!isBinary) {
+            console.log("data:", data.toString());
+          }
+
           if (lastSessionMeta === null) {
             lastSessionMeta = data.toString();
           }

@@ -1,4 +1,7 @@
 packages:
+  - 'shared'
   - 'generator'
   - 'server'
   - 'client'
+allowBuilds:
+  esbuild: true

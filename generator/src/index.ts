@@ -20,6 +20,7 @@ const runnerId = randomUUID();
 
 // define session meta data
 const sessionMeta: SessionMeta = {
+  type: "meta",
   sessionId,
   runnerId,
   startedAt: Date.now(),
@@ -35,6 +36,7 @@ ws.on("open", () => {
     const speed = randomInRange(SPEED_MIN_MS, SPEED_MAX_MS);
     const heartRate = Math.round(randomInRange(HR_MIN_BPM, HR_MAX_BPM));
     const tickEvent: TickEvent = {
+      type: "tick",
       sessionId,
       runnerId,
       t,

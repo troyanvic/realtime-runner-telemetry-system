@@ -1,11 +1,47 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from './assets/vite.svg'
-import heroImg from './assets/hero.png'
-import './App.css'
+import { useEffect, useState } from "react";
+import reactLogo from "./assets/react.svg";
+import viteLogo from "./assets/vite.svg";
+import heroImg from "./assets/hero.png";
+import "./App.css";
+import type { TelemetryEvent } from "@telemetry/shared";
 
 function App() {
-  const [count, setCount] = useState(0)
+  const [count, setCount] = useState(0);
+
+  useEffect(() => {
+    const ws = new WebSocket("ws://localhost:8080/subscribe");
+
+    ws.onopen = () => {
+      console.log("The subscriber is connected");
+    };
+
+    ws.onmessage = (event) => {
+      const msg = JSON.parse(event.data) as TelemetryEvent;
+
+      switch (msg.type) {
+        case "meta":
+          console.log("Received session metadata:", msg);
+          break;
+        case "tick":
+          console.log("Received tick event:", msg);
+          break;
+      }
+    };
+
+    ws.onerror = (error) => {
+      console.error("error:", error);
+    };
+
+    ws.onclose = (event) => {
+      const { code, reason } = event;
+
+      console.log(
+        `The subscriber is disconnected. Exit code: ${code}. Reason: ${reason}`,
+      );
+    };
+
+    return () => ws.close();
+  }, []);
 
   return (
     <>
@@ -116,7 +152,7 @@ function App() {
       <div className="ticks"></div>
       <section id="spacer"></section>
     </>
-  )
+  );
 }
 
-export default App
+export default App;

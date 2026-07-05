@@ -4,6 +4,7 @@ import viteLogo from "./assets/vite.svg";
 import heroImg from "./assets/hero.png";
 import "./App.css";
 import type { SessionMeta, TelemetryEvent, TickEvent } from "@telemetry/shared";
+import { formatSpeed, toPace, formatHr } from "./helpers";
 
 function App() {
   const [meta, setMeta] = useState<SessionMeta | null>(null);
@@ -21,13 +22,9 @@ function App() {
 
       switch (msg.type) {
         case "meta":
-          console.log("Received session metadata:", msg);
-
           setMeta(msg);
           break;
         case "tick":
-          console.log("Received tick event:", msg);
-
           setTicks((prevTicks) => [...prevTicks, msg].slice(-60));
           break;
       }
@@ -48,9 +45,6 @@ function App() {
     return () => ws.close();
   }, []);
 
-  console.log("meta:", meta);
-  console.log("ticks:", ticks);
-
   return (
     <>
       <section id="center">
@@ -61,6 +55,7 @@ function App() {
         </div>
         <div>
           <h1>Get started</h1>
+          {meta && <h2>Session id: {meta.sessionId}</h2>}
         </div>
       </section>
 
@@ -77,12 +72,17 @@ function App() {
 
               <div className="tick-row">
                 <div className="tick-label">Speed: </div>
-                <div className="tick-value">{speed} m/s</div>
+                <div className="tick-value">{formatSpeed(speed)}</div>
+              </div>
+
+              <div className="tick-row">
+                <div className="tick-label">Pace: </div>
+                <div className="tick-value">{toPace(speed)}</div>
               </div>
 
               <div className="tick-row">
                 <div className="tick-label">HR: </div>
-                <div className="tick-value">{heartRate} bpm</div>
+                <div className="tick-value">{formatHr(heartRate)}</div>
               </div>
             </div>
           );

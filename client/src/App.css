@@ -162,8 +162,13 @@
 }
 
 .ticks {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  align-items: center;
   position: relative;
   width: 100%;
+  margin-bottom: 15px;
 
   &::before,
   &::after {
@@ -181,4 +186,10 @@
     right: 0;
     border-right-color: var(--border);
   }
+}
+
+.tick-row {
+  display: flex;
+  gap: 10px;
+  align-items: center;
 }

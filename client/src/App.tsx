@@ -3,10 +3,11 @@ import reactLogo from "./assets/react.svg";
 import viteLogo from "./assets/vite.svg";
 import heroImg from "./assets/hero.png";
 import "./App.css";
-import type { TelemetryEvent } from "@telemetry/shared";
+import type { SessionMeta, TelemetryEvent, TickEvent } from "@telemetry/shared";
 
 function App() {
-  const [count, setCount] = useState(0);
+  const [meta, setMeta] = useState<SessionMeta | null>(null);
+  const [ticks, setTicks] = useState<TickEvent[]>([]);
 
   useEffect(() => {
     const ws = new WebSocket("ws://localhost:8080/subscribe");
@@ -21,9 +22,13 @@ function App() {
       switch (msg.type) {
         case "meta":
           console.log("Received session metadata:", msg);
+
+          setMeta(msg);
           break;
         case "tick":
           console.log("Received tick event:", msg);
+
+          setTicks((prevTicks) => [...prevTicks, msg].slice(-60));
           break;
       }
     };
@@ -43,6 +48,9 @@ function App() {
     return () => ws.close();
   }, []);
 
+  console.log("meta:", meta);
+  console.log("ticks:", ticks);
+
   return (
     <>
       <section id="center">
@@ -53,20 +61,33 @@ function App() {
         </div>
         <div>
           <h1>Get started</h1>
-          <p>
-            Edit <code>src/App.tsx</code> and save to test <code>HMR</code>
-          </p>
         </div>
-        <button
-          type="button"
-          className="counter"
-          onClick={() => setCount((count) => count + 1)}
-        >
-          Count is {count}
-        </button>
       </section>
 
-      <div className="ticks"></div>
+      <div className="ticks">
+        {ticks.map((tick) => {
+          const { speed, heartRate, tick: tickNum } = tick;
+
+          return (
+            <div key={tickNum} className="tick">
+              <div className="tick-row">
+                <div className="tick-label">#: </div>
+                <div className="tick-value">{tickNum}</div>
+              </div>
+
+              <div className="tick-row">
+                <div className="tick-label">Speed: </div>
+                <div className="tick-value">{speed} m/s</div>
+              </div>
+
+              <div className="tick-row">
+                <div className="tick-label">HR: </div>
+                <div className="tick-value">{heartRate} bpm</div>
+              </div>
+            </div>
+          );
+        })}
+      </div>
 
       <section id="next-steps">
         <div id="docs">
@@ -148,8 +169,6 @@ function App() {
           </ul>
         </div>
       </section>
-
-      <div className="ticks"></div>
       <section id="spacer"></section>
     </>
   );

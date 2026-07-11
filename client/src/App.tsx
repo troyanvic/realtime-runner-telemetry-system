@@ -1,6 +1,4 @@
-import reactLogo from "./assets/react.svg";
-import viteLogo from "./assets/vite.svg";
-import heroImg from "./assets/hero.png";
+import logo from "./assets/logo.svg";
 import "./App.css";
 import { formatSpeed, toPace, formatHr } from "./helpers";
 import { useTelemetrySocket } from "./hooks/useTelemetrySocket";
@@ -12,9 +10,13 @@ function App() {
     <>
       <section id="center">
         <div className="hero">
-          <img src={heroImg} className="base" width="170" height="179" alt="" />
-          <img src={reactLogo} className="framework" alt="React logo" />
-          <img src={viteLogo} className="vite" alt="Vite logo" />
+          <img
+            className="base"
+            src={logo}
+            width="200"
+            height="200"
+            alt="Runner pitwall"
+          />
         </div>
         <div>
           <h1>Runner pitwall</h1>

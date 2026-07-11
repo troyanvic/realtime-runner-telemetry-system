@@ -1,4 +1,4 @@
-import logo from "./assets/logo.svg";
+import logo from "./assets/logo-track.svg";
 import "./App.css";
 import { formatSpeed, toPace, formatHr } from "./helpers";
 import { useTelemetrySocket } from "./hooks/useTelemetrySocket";
@@ -14,7 +14,7 @@ function App() {
             className="base"
             src={logo}
             width="200"
-            height="200"
+            height="150"
             alt="Runner pitwall"
           />
         </div>

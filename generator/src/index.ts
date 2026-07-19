@@ -46,6 +46,20 @@ let intervalHandle: ReturnType<typeof setInterval> | undefined;
 
 ws.on("open", () => {
   let tick = 0;
+  let distance = 0;
+
+  const phaseFor = (distance: number) => {
+    const warmUpBoundary = 20;
+    const mainBoundary = 80;
+
+    if (distance < warmUpBoundary) {
+      return "warm-up";
+    } else if (distance < mainBoundary) {
+      return "main";
+    } else {
+      return "finish";
+    }
+  };
 
   const emitTick = () => {
     const speed = randomInRange(SPEED_MIN_MS, SPEED_MAX_MS);
